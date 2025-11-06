@@ -24,10 +24,11 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+codespace_user_secrets.json
 MANIFEST
 
 # Virtual environments
-venv/
+
 ENV/
 env/
 
