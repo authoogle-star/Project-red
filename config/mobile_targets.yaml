@@ -1,0 +1,95 @@
+# Mobile Security Testing - Authorized Targets
+# Only devices listed here can be targeted for testing
+# IMPORTANT: This is for IN-HOUSE team testing only
+
+authorized_targets:
+  # iOS Devices
+  - type: phone
+    value: "+1234567890"  # Replace with actual authorized phone number
+    device_type: ios
+    device_name: "Test iPhone - Security Team Member 1"
+    owner: "security_team_member_1"
+    status: active
+    authorized_by: "security_director"
+    authorization_date: "2024-01-01"
+    notes: "Primary iOS test device"
+
+  - type: email
+    value: "ios-test@yourcompany.com"  # Replace with actual authorized email
+    device_type: ios
+    device_name: "Test iPhone - Email Testing"
+    owner: "security_team_member_1"
+    status: active
+    authorized_by: "security_director"
+    authorization_date: "2024-01-01"
+    notes: "Email-based iOS testing"
+
+  # Android Devices
+  - type: phone
+    value: "+1234567891"  # Replace with actual authorized phone number
+    device_type: android
+    device_name: "Test Android - Security Team Member 2"
+    owner: "security_team_member_2"
+    status: active
+    authorized_by: "security_director"
+    authorization_date: "2024-01-01"
+    notes: "Primary Android test device"
+
+  - type: email
+    value: "android-test@yourcompany.com"  # Replace with actual authorized email
+    device_type: android
+    device_name: "Test Android - Email Testing"
+    owner: "security_team_member_2"
+    status: active
+    authorized_by: "security_director"
+    authorization_date: "2024-01-01"
+    notes: "Email-based Android testing"
+
+# Example format for adding more targets:
+#  - type: phone  # or 'email' or 'ip'
+#    value: "+1234567892"
+#    device_type: ios  # or 'android'
+#    device_name: "Description of device"
+#    owner: "team_member_name"
+#    status: active  # or 'inactive' to disable without removing
+#    authorized_by: "authorizing_manager"
+#    authorization_date: "YYYY-MM-DD"
+#    notes: "Any relevant notes"
+
+# Red Team / Blue Team Exercise Configuration
+exercise_config:
+  current_exercise: null
+  exercise_name: "Mobile Security Assessment 2024"
+  start_date: null
+  end_date: null
+  red_team_members:
+    - "red_team_operator_1"
+    - "red_team_operator_2"
+  blue_team_members:
+    - "blue_team_analyst_1"
+    - "blue_team_analyst_2"
+  notification_email: "security-team@yourcompany.com"
+
+# Test Types Configuration
+allowed_test_types:
+  ios:
+    - phishing
+    - smishing
+    - malicious_profile
+    - webkit_test
+  android:
+    - phishing
+    - smishing
+    - malicious_apk
+    - bluetooth_test
+
+# Safety Controls
+safety:
+  max_tests_per_target_per_day: 10
+  max_concurrent_tests: 5
+  require_manual_approval: false
+  auto_cleanup: true
+  test_window:
+    start_hour: 9  # 9 AM
+    end_hour: 17   # 5 PM
+    timezone: "America/New_York"

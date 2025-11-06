@@ -36,9 +36,15 @@ class RealTimeMonitoring:
         # Example alerting logic using email
         import smtplib
         from email.mime.text import MIMEText
+        import os
 
-        sender = "alert@example.com"
-        recipient = "admin@example.com"
+        sender = os.getenv("ALERT_SENDER_EMAIL", "alert@example.com")
+        recipient = os.getenv("ALERT_RECIPIENT_EMAIL", "admin@example.com")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+
         subject = "Security Alert"
         body = message
 
@@ -48,9 +54,15 @@ class RealTimeMonitoring:
         msg["To"] = recipient
 
         try:
-            with smtplib.SMTP("smtp.example.com") as server:
-                server.login("username", "password")
-                server.sendmail(sender, [recipient], msg.as_string())
+            if not smtp_user or not smtp_password:
+                logging.warning("SMTP credentials not configured. Alert not sent via email.")
+                return
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.send_message(msg)
+            logging.info(f"Alert email sent to {recipient}")
         except Exception as e:
             logging.error(f"Failed to send alert email: {e}")
 
@@ -123,9 +135,15 @@ class RealTimeMonitoring:
         # Example alerting logic using email
         import smtplib
         from email.mime.text import MIMEText
+        import os
 
-        sender = "alert@example.com"
-        recipient = "admin@example.com"
+        sender = os.getenv("ALERT_SENDER_EMAIL", "alert@example.com")
+        recipient = os.getenv("ALERT_RECIPIENT_EMAIL", "admin@example.com")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+
         subject = "Security Alert"
         body = message
 
@@ -135,9 +153,15 @@ class RealTimeMonitoring:
         msg["To"] = recipient
 
         try:
-            with smtplib.SMTP("smtp.example.com") as server:
-                server.login("username", "password")
-                server.sendmail(sender, [recipient], msg.as_string())
+            if not smtp_user or not smtp_password:
+                logging.warning("SMTP credentials not configured. Alert not sent via email.")
+                return
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.send_message(msg)
+            logging.info(f"Alert email sent to {recipient}")
         except Exception as e:
             logging.error(f"Failed to send alert email: {e}")
 
@@ -210,9 +234,15 @@ class RealTimeMonitoring:
         # Example alerting logic using email
         import smtplib
         from email.mime.text import MIMEText
+        import os
 
-        sender = "alert@example.com"
-        recipient = "admin@example.com"
+        sender = os.getenv("ALERT_SENDER_EMAIL", "alert@example.com")
+        recipient = os.getenv("ALERT_RECIPIENT_EMAIL", "admin@example.com")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+
         subject = "Security Alert"
         body = message
 
@@ -222,9 +252,15 @@ class RealTimeMonitoring:
         msg["To"] = recipient
 
         try:
-            with smtplib.SMTP("smtp.example.com") as server:
-                server.login("username", "password")
-                server.sendmail(sender, [recipient], msg.as_string())
+            if not smtp_user or not smtp_password:
+                logging.warning("SMTP credentials not configured. Alert not sent via email.")
+                return
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.send_message(msg)
+            logging.info(f"Alert email sent to {recipient}")
         except Exception as e:
             logging.error(f"Failed to send alert email: {e}")
 
@@ -297,9 +333,15 @@ class RealTimeMonitoring:
         # Example alerting logic using email
         import smtplib
         from email.mime.text import MIMEText
+        import os
 
-        sender = "alert@example.com"
-        recipient = "admin@example.com"
+        sender = os.getenv("ALERT_SENDER_EMAIL", "alert@example.com")
+        recipient = os.getenv("ALERT_RECIPIENT_EMAIL", "admin@example.com")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+
         subject = "Security Alert"
         body = message
 
@@ -309,9 +351,15 @@ class RealTimeMonitoring:
         msg["To"] = recipient
 
         try:
-            with smtplib.SMTP("smtp.example.com") as server:
-                server.login("username", "password")
-                server.sendmail(sender, [recipient], msg.as_string())
+            if not smtp_user or not smtp_password:
+                logging.warning("SMTP credentials not configured. Alert not sent via email.")
+                return
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.send_message(msg)
+            logging.info(f"Alert email sent to {recipient}")
         except Exception as e:
             logging.error(f"Failed to send alert email: {e}")
 
@@ -384,9 +432,15 @@ class RealTimeMonitoring:
         # Example alerting logic using email
         import smtplib
         from email.mime.text import MIMEText
+        import os
 
-        sender = "alert@example.com"
-        recipient = "admin@example.com"
+        sender = os.getenv("ALERT_SENDER_EMAIL", "alert@example.com")
+        recipient = os.getenv("ALERT_RECIPIENT_EMAIL", "admin@example.com")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+
         subject = "Security Alert"
         body = message
 
@@ -396,9 +450,15 @@ class RealTimeMonitoring:
         msg["To"] = recipient
 
         try:
-            with smtplib.SMTP("smtp.example.com") as server:
-                server.login("username", "password")
-                server.sendmail(sender, [recipient], msg.as_string())
+            if not smtp_user or not smtp_password:
+                logging.warning("SMTP credentials not configured. Alert not sent via email.")
+                return
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.send_message(msg)
+            logging.info(f"Alert email sent to {recipient}")
         except Exception as e:
             logging.error(f"Failed to send alert email: {e}")
 
@@ -471,9 +531,15 @@ class RealTimeMonitoring:
         # Example alerting logic using email
         import smtplib
         from email.mime.text import MIMEText
+        import os
 
-        sender = "alert@example.com"
-        recipient = "admin@example.com"
+        sender = os.getenv("ALERT_SENDER_EMAIL", "alert@example.com")
+        recipient = os.getenv("ALERT_RECIPIENT_EMAIL", "admin@example.com")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+
         subject = "Security Alert"
         body = message
 
@@ -483,9 +549,15 @@ class RealTimeMonitoring:
         msg["To"] = recipient
 
         try:
-            with smtplib.SMTP("smtp.example.com") as server:
-                server.login("username", "password")
-                server.sendmail(sender, [recipient], msg.as_string())
+            if not smtp_user or not smtp_password:
+                logging.warning("SMTP credentials not configured. Alert not sent via email.")
+                return
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.send_message(msg)
+            logging.info(f"Alert email sent to {recipient}")
         except Exception as e:
             logging.error(f"Failed to send alert email: {e}")
 
@@ -558,9 +630,15 @@ class RealTimeMonitoring:
         # Example alerting logic using email
         import smtplib
         from email.mime.text import MIMEText
+        import os
 
-        sender = "alert@example.com"
-        recipient = "admin@example.com"
+        sender = os.getenv("ALERT_SENDER_EMAIL", "alert@example.com")
+        recipient = os.getenv("ALERT_RECIPIENT_EMAIL", "admin@example.com")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+
         subject = "Security Alert"
         body = message
 
@@ -570,9 +648,15 @@ class RealTimeMonitoring:
         msg["To"] = recipient
 
         try:
-            with smtplib.SMTP("smtp.example.com") as server:
-                server.login("username", "password")
-                server.sendmail(sender, [recipient], msg.as_string())
+            if not smtp_user or not smtp_password:
+                logging.warning("SMTP credentials not configured. Alert not sent via email.")
+                return
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.send_message(msg)
+            logging.info(f"Alert email sent to {recipient}")
         except Exception as e:
             logging.error(f"Failed to send alert email: {e}")
 
@@ -645,9 +729,15 @@ class RealTimeMonitoring:
         # Example alerting logic using email
         import smtplib
         from email.mime.text import MIMEText
+        import os
 
-        sender = "alert@example.com"
-        recipient = "admin@example.com"
+        sender = os.getenv("ALERT_SENDER_EMAIL", "alert@example.com")
+        recipient = os.getenv("ALERT_RECIPIENT_EMAIL", "admin@example.com")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+
         subject = "Security Alert"
         body = message
 
@@ -657,9 +747,15 @@ class RealTimeMonitoring:
         msg["To"] = recipient
 
         try:
-            with smtplib.SMTP("smtp.example.com") as server:
-                server.login("username", "password")
-                server.sendmail(sender, [recipient], msg.as_string())
+            if not smtp_user or not smtp_password:
+                logging.warning("SMTP credentials not configured. Alert not sent via email.")
+                return
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.send_message(msg)
+            logging.info(f"Alert email sent to {recipient}")
         except Exception as e:
             logging.error(f"Failed to send alert email: {e}")
 
@@ -732,9 +828,15 @@ class RealTimeMonitoring:
         # Example alerting logic using email
         import smtplib
         from email.mime.text import MIMEText
+        import os
 
-        sender = "alert@example.com"
-        recipient = "admin@example.com"
+        sender = os.getenv("ALERT_SENDER_EMAIL", "alert@example.com")
+        recipient = os.getenv("ALERT_RECIPIENT_EMAIL", "admin@example.com")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+
         subject = "Security Alert"
         body = message
 
@@ -744,9 +846,15 @@ class RealTimeMonitoring:
         msg["To"] = recipient
 
         try:
-            with smtplib.SMTP("smtp.example.com") as server:
-                server.login("username", "password")
-                server.sendmail(sender, [recipient], msg.as_string())
+            if not smtp_user or not smtp_password:
+                logging.warning("SMTP credentials not configured. Alert not sent via email.")
+                return
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.send_message(msg)
+            logging.info(f"Alert email sent to {recipient}")
         except Exception as e:
             logging.error(f"Failed to send alert email: {e}")
 
@@ -819,9 +927,15 @@ class RealTimeMonitoring:
         # Example alerting logic using email
         import smtplib
         from email.mime.text import MIMEText
+        import os
 
-        sender = "alert@example.com"
-        recipient = "admin@example.com"
+        sender = os.getenv("ALERT_SENDER_EMAIL", "alert@example.com")
+        recipient = os.getenv("ALERT_RECIPIENT_EMAIL", "admin@example.com")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+
         subject = "Security Alert"
         body = message
 
@@ -831,9 +945,15 @@ class RealTimeMonitoring:
         msg["To"] = recipient
 
         try:
-            with smtplib.SMTP("smtp.example.com") as server:
-                server.login("username", "password")
-                server.sendmail(sender, [recipient], msg.as_string())
+            if not smtp_user or not smtp_password:
+                logging.warning("SMTP credentials not configured. Alert not sent via email.")
+                return
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.send_message(msg)
+            logging.info(f"Alert email sent to {recipient}")
         except Exception as e:
             logging.error(f"Failed to send alert email: {e}")
 
@@ -906,9 +1026,15 @@ class RealTimeMonitoring:
         # Example alerting logic using email
         import smtplib
         from email.mime.text import MIMEText
+        import os
 
-        sender = "alert@example.com"
-        recipient = "admin@example.com"
+        sender = os.getenv("ALERT_SENDER_EMAIL", "alert@example.com")
+        recipient = os.getenv("ALERT_RECIPIENT_EMAIL", "admin@example.com")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+
         subject = "Security Alert"
         body = message
 
@@ -918,9 +1044,15 @@ class RealTimeMonitoring:
         msg["To"] = recipient
 
         try:
-            with smtplib.SMTP("smtp.example.com") as server:
-                server.login("username", "password")
-                server.sendmail(sender, [recipient], msg.as_string())
+            if not smtp_user or not smtp_password:
+                logging.warning("SMTP credentials not configured. Alert not sent via email.")
+                return
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.send_message(msg)
+            logging.info(f"Alert email sent to {recipient}")
         except Exception as e:
             logging.error(f"Failed to send alert email: {e}")
 
@@ -993,9 +1125,15 @@ class RealTimeMonitoring:
         # Example alerting logic using email
         import smtplib
         from email.mime.text import MIMEText
+        import os
 
-        sender = "alert@example.com"
-        recipient = "admin@example.com"
+        sender = os.getenv("ALERT_SENDER_EMAIL", "alert@example.com")
+        recipient = os.getenv("ALERT_RECIPIENT_EMAIL", "admin@example.com")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+
         subject = "Security Alert"
         body = message
 
@@ -1005,9 +1143,15 @@ class RealTimeMonitoring:
         msg["To"] = recipient
 
         try:
-            with smtplib.SMTP("smtp.example.com") as server:
-                server.login("username", "password")
-                server.sendmail(sender, [recipient], msg.as_string())
+            if not smtp_user or not smtp_password:
+                logging.warning("SMTP credentials not configured. Alert not sent via email.")
+                return
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.send_message(msg)
+            logging.info(f"Alert email sent to {recipient}")
         except Exception as e:
             logging.error(f"Failed to send alert email: {e}")
 
@@ -1080,9 +1224,15 @@ class RealTimeMonitoring:
         # Example alerting logic using email
         import smtplib
         from email.mime.text import MIMEText
+        import os
 
-        sender = "alert@example.com"
-        recipient = "admin@example.com"
+        sender = os.getenv("ALERT_SENDER_EMAIL", "alert@example.com")
+        recipient = os.getenv("ALERT_RECIPIENT_EMAIL", "admin@example.com")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+
         subject = "Security Alert"
         body = message
 
@@ -1092,9 +1242,15 @@ class RealTimeMonitoring:
         msg["To"] = recipient
 
         try:
-            with smtplib.SMTP("smtp.example.com") as server:
-                server.login("username", "password")
-                server.sendmail(sender, [recipient], msg.as_string())
+            if not smtp_user or not smtp_password:
+                logging.warning("SMTP credentials not configured. Alert not sent via email.")
+                return
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.send_message(msg)
+            logging.info(f"Alert email sent to {recipient}")
         except Exception as e:
             logging.error(f"Failed to send alert email: {e}")
 
@@ -1167,9 +1323,15 @@ class RealTimeMonitoring:
         # Example alerting logic using email
         import smtplib
         from email.mime.text import MIMEText
+        import os
 
-        sender = "alert@example.com"
-        recipient = "admin@example.com"
+        sender = os.getenv("ALERT_SENDER_EMAIL", "alert@example.com")
+        recipient = os.getenv("ALERT_RECIPIENT_EMAIL", "admin@example.com")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+
         subject = "Security Alert"
         body = message
 
@@ -1179,4 +1341,14 @@ class RealTimeMonitoring:
         msg["To"] = recipient
 
         try:
-            with smtplib
+            if not smtp_user or not smtp_password:
+                logging.warning("SMTP credentials not configured. Alert not sent via email.")
+                return
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.send_message(msg)
+            logging.info(f"Alert email sent to {recipient}")
+        except Exception as e:
+            logging.error(f"Failed to send alert email: {e}")

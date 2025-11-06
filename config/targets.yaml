@@ -1,0 +1,358 @@
+# ============================================================================
+# PROJECT RED SWORD - AUTHORIZED ATTACK TARGETS
+# ============================================================================
+# This file defines the WHITELIST of authorized targets for attack simulations
+# ONLY targets listed here can be attacked when safe mode is enabled
+# ============================================================================
+
+# ============================================================================
+# TARGET DEFINITIONS
+# ============================================================================
+
+# Test Environment Targets
+test_environment:
+  description: "Isolated test lab for safe attack simulations"
+
+  networks:
+    - name: "Test Lab Primary"
+      cidr: "192.168.100.0/24"
+      purpose: "Main testing network"
+      risk_level: "low"
+
+    - name: "Test Lab Secondary"
+      cidr: "192.168.101.0/24"
+      purpose: "Secondary testing network"
+      risk_level: "low"
+
+  hosts:
+    # Web Application Targets
+    - hostname: "test-webapp-01"
+      ip: "192.168.100.10"
+      services:
+        - port: 80
+          protocol: "tcp"
+          service: "http"
+        - port: 443
+          protocol: "tcp"
+          service: "https"
+      attack_types:
+        - "sql_injection"
+        - "xss"
+        - "csrf"
+        - "api_exploitation"
+      notes: "Vulnerable web application for testing"
+
+    - hostname: "test-webapp-02"
+      ip: "192.168.100.11"
+      services:
+        - port: 8080
+          protocol: "tcp"
+          service: "http"
+      attack_types:
+        - "web_application"
+      notes: "API testing server"
+
+    # Database Targets
+    - hostname: "test-db-01"
+      ip: "192.168.100.20"
+      services:
+        - port: 3306
+          protocol: "tcp"
+          service: "mysql"
+      attack_types:
+        - "sql_injection"
+        - "authentication_bypass"
+      notes: "MySQL test database"
+
+    - hostname: "test-db-02"
+      ip: "192.168.100.21"
+      services:
+        - port: 5432
+          protocol: "tcp"
+          service: "postgresql"
+      attack_types:
+        - "sql_injection"
+      notes: "PostgreSQL test database"
+
+    # Network Service Targets
+    - hostname: "test-dns-01"
+      ip: "192.168.100.30"
+      services:
+        - port: 53
+          protocol: "udp"
+          service: "dns"
+      attack_types:
+        - "dns_tunneling"
+        - "dns_spoofing"
+      notes: "DNS server for tunneling tests"
+
+    - hostname: "test-ssh-01"
+      ip: "192.168.100.40"
+      services:
+        - port: 22
+          protocol: "tcp"
+          service: "ssh"
+      attack_types:
+        - "authentication_bypass"
+        - "privilege_escalation"
+      notes: "SSH server with test credentials"
+
+    # Social Engineering Targets
+    - hostname: "test-mail-01"
+      ip: "192.168.100.50"
+      services:
+        - port: 25
+          protocol: "tcp"
+          service: "smtp"
+        - port: 143
+          protocol: "tcp"
+          service: "imap"
+      attack_types:
+        - "phishing"
+        - "social_engineering"
+      notes: "Mail server for phishing tests"
+
+    # Vulnerable Systems
+    - hostname: "test-vuln-01"
+      ip: "192.168.100.60"
+      services:
+        - port: 80
+          protocol: "tcp"
+          service: "http"
+      attack_types:
+        - "all"
+      notes: "Intentionally vulnerable system (WebGoat, DVWA)"
+
+    - hostname: "test-vuln-02"
+      ip: "192.168.100.61"
+      attack_types:
+        - "network_exploitation"
+        - "apt_simulation"
+      notes: "Network penetration testing target"
+
+  # Test User Accounts
+  test_accounts:
+    - username: "testuser1@test.local"
+      purpose: "Phishing campaign target"
+
+    - username: "testuser2@test.local"
+      purpose: "Social engineering target"
+
+    - username: "testadmin@test.local"
+      purpose: "Privilege escalation target"
+
+# ============================================================================
+# STAGING ENVIRONMENT (Use with caution)
+# ============================================================================
+staging_environment:
+  description: "Staging environment - production-like but isolated"
+  enabled: false  # Disabled by default
+
+  networks:
+    - name: "Staging Network"
+      cidr: "192.168.200.0/24"
+      purpose: "Pre-production testing"
+      risk_level: "medium"
+
+  # Require special approval for staging
+  require_approval: true
+  approval_level: "manager"
+
+# ============================================================================
+# PRODUCTION ENVIRONMENT
+# ============================================================================
+production_environment:
+  description: "PRODUCTION - DO NOT ATTACK DIRECTLY"
+  enabled: false  # MUST remain false in normal operations
+
+  # Production should NEVER be a direct target
+  # Only used for monitoring and defense testing
+  networks: []
+  hosts: []
+
+  notes: |
+    Production systems should NEVER be direct attack targets.
+    Use production ONLY for:
+    - Real-time monitoring and threat detection
+    - Analyzing actual threats
+    - Validating defensive controls
+    - Incident response testing (with extreme caution)
+
+# ============================================================================
+# EXTERNAL TARGETS (Third-party owned)
+# ============================================================================
+external_targets:
+  description: "External targets with explicit written authorization"
+  enabled: false
+
+  # CRITICAL: Requires legal authorization
+  require_authorization: true
+  authorization_document_required: true
+
+  targets: []
+
+  notes: |
+    External target testing requires:
+    1. Written authorization from target owner
+    2. Defined scope and limitations
+    3. Insurance and legal protection
+    4. Specific time windows
+    5. Emergency contact information
+    6. Rules of engagement document
+
+# ============================================================================
+# CLOUD TARGETS
+# ============================================================================
+cloud_targets:
+  description: "Cloud resources owned by organization"
+  enabled: false
+
+  aws:
+    enabled: false
+    accounts: []
+    regions: []
+
+  azure:
+    enabled: false
+    subscriptions: []
+
+  gcp:
+    enabled: false
+    projects: []
+
+# ============================================================================
+# ATTACK TYPE RESTRICTIONS
+# ============================================================================
+attack_type_restrictions:
+  # High-risk attacks require specific approval
+  high_risk_attacks:
+    - "data_exfiltration"
+    - "ransomware_simulation"
+    - "destructive_operations"
+    - "dos_attacks"
+
+  # Forbidden attack types (never allowed)
+  forbidden_attacks:
+    - "actual_malware_deployment"
+    - "real_data_theft"
+    - "production_service_disruption"
+    - "external_internet_attacks"
+
+# ============================================================================
+# TIME-BASED RESTRICTIONS
+# ============================================================================
+time_restrictions:
+  # Maintenance windows for safe testing
+  maintenance_windows:
+    - name: "Weekday Testing"
+      days: ["monday", "tuesday", "wednesday", "thursday", "friday"]
+      start_time: "09:00"
+      end_time: "17:00"
+      timezone: "UTC"
+
+    - name: "Weekend Extended Testing"
+      days: ["saturday"]
+      start_time: "00:00"
+      end_time: "23:59"
+      timezone: "UTC"
+      enabled: false
+
+  # Blackout periods (no testing allowed)
+  blackout_periods:
+    - name: "Year End Freeze"
+      start_date: "2024-12-20"
+      end_date: "2025-01-05"
+      reason: "Holiday freeze period"
+
+# ============================================================================
+# NOTIFICATION & COORDINATION
+# ============================================================================
+notifications:
+  # Notify these contacts before attacking
+  notify_before_attack:
+    - name: "Security Team Lead"
+      email: "security-lead@localhost"
+      notification_time_minutes: 30
+
+    - name: "System Administrator"
+      email: "sysadmin@localhost"
+      notification_time_minutes: 15
+
+  # Coordinate with these teams
+  coordinate_with:
+    - "IT Operations"
+    - "Security Operations Center"
+    - "Network Engineering"
+
+# ============================================================================
+# VALIDATION & APPROVAL
+# ============================================================================
+validation:
+  # Validate targets before each attack
+  validate_before_attack: true
+
+  # Approval workflow
+  approval_workflow:
+    enabled: true
+    approvers:
+      - role: "Security Analyst"
+        required: true
+      - role: "Security Manager"
+        required: false  # Only for high-risk
+      - role: "CISO"
+        required: false  # Only for production/external
+
+# ============================================================================
+# EMERGENCY CONTACTS
+# ============================================================================
+emergency_contacts:
+  - name: "Security Operations Center"
+    role: "24/7 SOC"
+    phone: "+1-555-0100"
+    email: "soc@localhost"
+
+  - name: "Incident Response Team"
+    role: "IR Coordinator"
+    phone: "+1-555-0200"
+    email: "incident-response@localhost"
+
+# ============================================================================
+# AUDIT & COMPLIANCE
+# ============================================================================
+audit:
+  # Log all target access
+  log_all_access: true
+
+  # Review target list regularly
+  review_frequency_days: 30
+  last_review_date: "2024-11-04"
+  next_review_date: "2024-12-04"
+
+  # Target list version
+  version: "1.0.0"
+  last_updated_by: "Security Team"
+  last_updated_date: "2024-11-04"
+
+# ============================================================================
+# NOTES & BEST PRACTICES
+# ============================================================================
+# BEST PRACTICES:
+# 1. Keep this list minimal - only add necessary targets
+# 2. Review and update regularly
+# 3. Remove unused targets immediately
+# 4. Document all changes with reasons
+# 5. Require approval for additions
+# 6. Use specific IPs/hostnames, avoid wildcards
+# 7. Define explicit attack types per target
+# 8. Set appropriate risk levels
+# 9. Maintain emergency contacts
+# 10. Version control this file
+#
+# SECURITY REMINDERS:
+# - Never add production systems without explicit approval
+# - Always verify authorization for external targets
+# - Coordinate with affected teams before testing
+# - Maintain audit trail of all changes
+# - Test in most isolated environment possible
+# - Have rollback plan for all attacks
+# ============================================================================

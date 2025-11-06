@@ -1,0 +1,412 @@
+# ============================================================================
+# PROJECT RED SWORD - ATTACK SIMULATION CONFIGURATION
+# ============================================================================
+# This file defines parameters for all attack simulation modules
+# Modify these settings to adjust attack intensity, scope, and behavior
+# ============================================================================
+
+# ============================================================================
+# GLOBAL ATTACK SETTINGS
+# ============================================================================
+global:
+  enabled: true
+  safe_mode: true
+  max_concurrent_attacks: 5
+  attack_timeout_seconds: 300
+  rate_limit_per_minute: 10
+  cooldown_between_attacks: 30
+  auto_cleanup: true
+  require_approval: false  # Set true for high-risk attacks
+
+  # Resource limits
+  max_memory_mb: 512
+  max_cpu_percent: 50
+
+  # Logging
+  log_all_attempts: true
+  log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+
+# ============================================================================
+# SOCIAL ENGINEERING ATTACKS
+# ============================================================================
+social_engineering:
+  enabled: true
+
+  # Phishing Campaigns
+  phishing:
+    enabled: true
+    max_targets_per_campaign: 50
+    email_delay_seconds: 5
+    templates:
+      - "password_reset"
+      - "security_alert"
+      - "urgent_action_required"
+      - "account_verification"
+      - "document_sharing"
+
+    # Target selection
+    randomize_targets: true
+    exclude_domains: []  # Add domains to exclude
+    test_accounts_only: true  # Only target test accounts
+
+    # Tracking
+    track_clicks: true
+    track_credentials: true
+    track_downloads: true
+
+  # OTP Interception
+  otp_interception:
+    enabled: false  # Disabled in demo mode
+    methods:
+      - "email"
+      - "sms"
+    timeout_seconds: 300
+
+  # Spear Phishing
+  spear_phishing:
+    enabled: true
+    research_targets: true
+    personalization_level: "high"  # low, medium, high
+    max_targets: 10
+
+# ============================================================================
+# WEB APPLICATION ATTACKS
+# ============================================================================
+web_application:
+  enabled: true
+
+  # SQL Injection
+  sql_injection:
+    enabled: true
+    max_payloads: 100
+    delay_ms: 1000
+    techniques:
+      - "union_based"
+      - "boolean_based"
+      - "time_based"
+      - "error_based"
+      - "stacked_queries"
+    databases:
+      - "mysql"
+      - "postgresql"
+      - "mssql"
+      - "oracle"
+
+  # Cross-Site Scripting (XSS)
+  xss:
+    enabled: true
+    types:
+      - "reflected"
+      - "stored"
+      - "dom_based"
+    payloads_per_type: 20
+    test_waf_bypass: true
+
+  # Cross-Site Request Forgery (CSRF)
+  csrf:
+    enabled: true
+    test_token_validation: true
+    test_same_site_cookies: true
+
+  # API Exploitation
+  api_exploitation:
+    enabled: true
+    methods:
+      - "jwt_manipulation"
+      - "api_key_leaks"
+      - "rate_limit_bypass"
+      - "injection_attacks"
+
+  # File Upload Vulnerabilities
+  file_upload:
+    enabled: true
+    test_extensions: true
+    test_mime_types: true
+    test_content_validation: true
+
+  # Authentication Bypass
+  auth_bypass:
+    enabled: true
+    brute_force_attempts: 10
+    credential_stuffing: false  # Disabled by default
+    session_hijacking: true
+
+# ============================================================================
+# NETWORK ATTACKS
+# ============================================================================
+network:
+  enabled: true
+
+  # Network Reconnaissance
+  reconnaissance:
+    enabled: true
+    max_hosts: 100
+    scan_rate_limit: 5
+    techniques:
+      - "port_scanning"
+      - "service_enumeration"
+      - "os_fingerprinting"
+      - "banner_grabbing"
+
+  # DNS Tunneling
+  dns_tunneling:
+    enabled: true
+    payload_size_bytes: 512
+    query_rate_per_second: 10
+    domains:
+      - "test.local"
+
+  # ICMP Tunneling
+  icmp_tunneling:
+    enabled: true
+    packet_size_bytes: 1024
+    packet_rate_per_second: 5
+
+  # Man-in-the-Middle (MITM)
+  mitm:
+    enabled: true
+    interfaces:
+      - "eth0"
+    techniques:
+      - "arp_spoofing"
+      - "dns_spoofing"
+      - "ssl_stripping"
+    capture_credentials: true
+
+  # Network Exploitation
+  exploitation:
+    enabled: true
+    protocols:
+      - "tcp"
+      - "udp"
+      - "icmp"
+    port_ranges:
+      - "1-1024"  # Well-known ports
+      - "8000-9000"  # Common web services
+
+# ============================================================================
+# APT (ADVANCED PERSISTENT THREAT) SIMULATION
+# ============================================================================
+apt_simulation:
+  enabled: true
+
+  # Multi-Stage Attacks
+  multi_stage:
+    enabled: true
+    stages:
+      - name: "reconnaissance"
+        duration_minutes: 10
+        stealth_level: "high"
+
+      - name: "initial_compromise"
+        duration_minutes: 15
+        techniques:
+          - "phishing"
+          - "web_exploit"
+
+      - name: "establish_foothold"
+        duration_minutes: 20
+        techniques:
+          - "backdoor_installation"
+          - "persistence_mechanisms"
+
+      - name: "lateral_movement"
+        duration_minutes: 30
+        max_hops: 3
+        techniques:
+          - "credential_dumping"
+          - "pass_the_hash"
+
+      - name: "data_exfiltration"
+        duration_minutes: 20
+        max_data_mb: 100
+        channels:
+          - "dns_tunneling"
+          - "https_post"
+          - "icmp_tunneling"
+
+  # Persistence Mechanisms
+  persistence:
+    enabled: true
+    methods:
+      - "scheduled_tasks"
+      - "registry_keys"
+      - "service_creation"
+      - "startup_folders"
+
+  # Lateral Movement
+  lateral_movement:
+    enabled: true
+    max_hops: 3
+    techniques:
+      - "psexec"
+      - "wmi"
+      - "powershell_remoting"
+      - "rdp"
+
+  # Data Exfiltration
+  data_exfiltration:
+    enabled: true
+    max_data_size_mb: 100
+    compression_enabled: true
+    encryption_enabled: true
+    channels:
+      - "http/https"
+      - "dns"
+      - "icmp"
+      - "email"
+
+# ============================================================================
+# AI RED TEAMING
+# ============================================================================
+ai_red_teaming:
+  enabled: true
+
+  # Attack Intelligence
+  attack_intelligence:
+    enabled: true
+    learn_from_previous: true
+    adapt_to_defenses: true
+    optimize_payloads: true
+
+  # Adaptive Attacks
+  adaptive_attacks:
+    enabled: true
+    mutation_rate: 0.2
+    evolution_generations: 5
+
+  # Evasion Techniques
+  evasion:
+    enabled: true
+    techniques:
+      - "polymorphic_payloads"
+      - "obfuscation"
+      - "timing_variation"
+      - "traffic_blending"
+
+  # Scenario Generation
+  scenario_generation:
+    enabled: true
+    complexity_levels:
+      - "low"
+      - "medium"
+      - "high"
+    scenarios_per_run: 3
+
+# ============================================================================
+# WIRELESS EXPLOITATION
+# ============================================================================
+wireless:
+  enabled: false  # Disabled by default, requires hardware
+
+  # WPA/WPA2 Attacks
+  wpa_attacks:
+    enabled: false
+    capture_handshakes: true
+    dictionary_attack: false
+
+  # Rogue Access Point
+  rogue_ap:
+    enabled: false
+    ssid: "Free_WiFi_Test"
+    capture_credentials: false
+
+# ============================================================================
+# IOT EXPLOITATION
+# ============================================================================
+iot:
+  enabled: false  # Disabled by default
+
+  # Device Discovery
+  discovery:
+    enabled: false
+    protocols:
+      - "upnp"
+      - "mdns"
+      - "ssdp"
+
+  # Exploitation
+  exploitation:
+    enabled: false
+    default_credentials: true
+    firmware_analysis: false
+
+# ============================================================================
+# CLOUD EXPLOITATION
+# ============================================================================
+cloud:
+  enabled: false  # Disabled by default
+
+  # AWS
+  aws:
+    enabled: false
+    enumerate_s3: false
+    test_iam_permissions: false
+
+  # Azure
+  azure:
+    enabled: false
+    enumerate_storage: false
+
+  # Google Cloud
+  gcp:
+    enabled: false
+    enumerate_buckets: false
+
+# ============================================================================
+# ATTACK SCHEDULING
+# ============================================================================
+scheduling:
+  enabled: false  # Manual execution by default
+
+  # Automated schedule (cron format)
+  schedules:
+    social_engineering: "0 9 * * *"  # Daily at 9 AM
+    web_application: "0 13 * * *"  # Daily at 1 PM
+    network: "0 17 * * *"  # Daily at 5 PM
+    apt_simulation: "0 0 * * 1"  # Weekly on Monday
+
+  # Randomization
+  randomize_timing: true
+  random_delay_minutes: 30
+
+# ============================================================================
+# REPORTING
+# ============================================================================
+reporting:
+  enabled: true
+
+  # Report types
+  types:
+    - "attack_summary"
+    - "vulnerability_findings"
+    - "detection_analysis"
+    - "remediation_recommendations"
+
+  # Report frequency
+  daily_reports: true
+  weekly_reports: true
+  monthly_reports: true
+
+  # Export formats
+  formats:
+    - "html"
+    - "pdf"
+    - "json"
+    - "csv"
+
+  # Report destinations
+  destinations:
+    file_system: true
+    email: false  # Disabled in demo mode
+    dashboard: true
+
+# ============================================================================
+# NOTES
+# ============================================================================
+# - All attacks are logged to database for analysis
+# - Safe mode prevents actual damage to systems
+# - Adjust settings based on your security posture
+# - Test in isolated environment first
+# - Review logs and reports regularly
+# ============================================================================

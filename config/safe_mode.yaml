@@ -1,0 +1,440 @@
+# ============================================================================
+# PROJECT RED SWORD - SAFE MODE CONFIGURATION
+# ============================================================================
+# This file defines safety controls and guardrails for production environments
+# These settings prevent accidental damage and enforce security best practices
+# ============================================================================
+
+# ============================================================================
+# SAFE MODE MASTER SWITCH
+# ============================================================================
+safe_mode:
+  enabled: true
+  enforcement_level: "strict"  # strict, moderate, permissive
+  override_allowed: false  # Require admin token to override
+  admin_override_token_required: true
+
+# ============================================================================
+# ATTACK RESTRICTIONS
+# ============================================================================
+attack_restrictions:
+  # Prevent destructive operations
+  prevent_data_deletion: true
+  prevent_system_modification: true
+  prevent_service_disruption: true
+  prevent_credential_theft: true  # Real credentials
+  prevent_data_exfiltration_external: true  # To external networks
+
+  # Rate limiting
+  max_attacks_per_hour: 60
+  max_attacks_per_day: 500
+  cooldown_after_high_severity: 300  # seconds
+
+  # Resource protection
+  max_cpu_usage_percent: 50
+  max_memory_usage_mb: 1024
+  max_network_bandwidth_mbps: 100
+  max_disk_io_mbps: 50
+
+  # Time restrictions
+  allow_24_7: false  # If false, use time windows
+  time_windows:
+    - days: ["monday", "tuesday", "wednesday", "thursday", "friday"]
+      start_time: "09:00"
+      end_time: "17:00"
+    - days: ["saturday", "sunday"]
+      start_time: "00:00"
+      end_time: "00:00"  # Disabled on weekends
+
+# ============================================================================
+# NETWORK SEGMENTATION
+# ============================================================================
+network_segmentation:
+  enforce: true
+
+  # Allowed target networks (CIDR notation)
+  allowed_networks:
+    - "10.0.0.0/8"     # Private network
+    - "172.16.0.0/12"  # Private network
+    - "192.168.0.0/16" # Private network
+
+  # Prohibited networks
+  prohibited_networks:
+    - "0.0.0.0/0"      # Internet (block all by default)
+    - "169.254.0.0/16" # Link-local
+
+  # Protected internal networks (never attack)
+  protected_networks:
+    - "192.168.1.0/24"  # Management network
+    - "10.0.0.0/24"     # Infrastructure network
+
+  # Allowed ports
+  allowed_ports:
+    tcp:
+      - 80    # HTTP
+      - 443   # HTTPS
+      - 8080  # Alt HTTP
+      - 8443  # Alt HTTPS
+    udp:
+      - 53    # DNS
+      - 123   # NTP
+
+  # Block outbound connections to internet
+  block_internet_egress: true
+
+# ============================================================================
+# TARGET VALIDATION
+# ============================================================================
+target_validation:
+  enabled: true
+
+  # Require explicit approval for targets
+  require_approval: true
+  approval_method: "whitelist"  # whitelist, blacklist, manual
+
+  # Load targets from targets.yaml
+  use_target_file: true
+  target_file: "config/targets.yaml"
+
+  # Validate targets before attack
+  validate_before_attack: true
+  validation_checks:
+    - "network_segment"
+    - "ip_whitelist"
+    - "hostname_whitelist"
+    - "service_availability"
+
+  # Auto-reject suspicious targets
+  reject_external_ips: true
+  reject_production_keywords: true
+  production_keywords:
+    - "prod"
+    - "production"
+    - "live"
+    - "public"
+
+# ============================================================================
+# MONITORING & ALERTING
+# ============================================================================
+monitoring:
+  enabled: true
+
+  # Real-time monitoring
+  monitor_all_attacks: true
+  monitor_resource_usage: true
+  monitor_network_traffic: true
+
+  # Alert on violations
+  alert_on_violation: true
+  alert_channels:
+    - "console"
+    - "log_file"
+    - "dashboard"
+    # - "email"  # Disabled in demo mode
+    # - "sms"    # Disabled in demo mode
+
+  # Threshold alerts
+  alert_thresholds:
+    cpu_usage_percent: 70
+    memory_usage_percent: 80
+    disk_usage_percent: 85
+    attack_failure_rate: 0.5  # 50% failure rate
+    detection_rate: 0.9  # 90% detected
+
+# ============================================================================
+# AUTOMATIC KILL SWITCH
+# ============================================================================
+kill_switch:
+  enabled: true
+
+  # Automatic triggers
+  auto_trigger:
+    enabled: true
+    conditions:
+      - type: "cpu_overload"
+        threshold: 90
+        duration_seconds: 60
+
+      - type: "memory_overload"
+        threshold: 95
+        duration_seconds: 30
+
+      - type: "too_many_detections"
+        threshold: 0.95  # 95% detection rate
+        attack_count: 20
+
+      - type: "attack_failure_rate"
+        threshold: 0.8  # 80% failure
+        attack_count: 10
+
+      - type: "unauthorized_target"
+        threshold: 1  # Any unauthorized target
+
+  # Manual kill switch
+  manual_trigger:
+    enabled: true
+    methods:
+      - "api_endpoint"
+      - "cli_command"
+      - "dashboard_button"
+      - "file_trigger"  # Create .kill_switch file
+
+  # Actions on trigger
+  actions:
+    - "stop_all_attacks"
+    - "close_network_connections"
+    - "cleanup_artifacts"
+    - "log_incident"
+    - "notify_admins"
+    - "create_backup"
+
+# ============================================================================
+# LOGGING & AUDIT
+# ============================================================================
+logging:
+  enabled: true
+
+  # Log everything in safe mode
+  log_level: "DEBUG"
+  log_all_attempts: true
+  log_all_commands: true
+  log_all_network_traffic: true
+
+  # Audit trail
+  immutable_audit_log: true
+  blockchain_logging: true
+
+  # Log retention
+  retention_days: 90
+  archive_after_days: 30
+
+  # Log encryption
+  encrypt_logs: false  # Set true for sensitive data
+  encryption_algorithm: "AES256"
+
+# ============================================================================
+# BACKUP & RECOVERY
+# ============================================================================
+backup:
+  enabled: true
+
+  # Automatic backups
+  auto_backup: true
+  backup_before_attack: true
+  backup_frequency: "hourly"
+
+  # Backup targets
+  backup_items:
+    - "database"
+    - "configuration"
+    - "logs"
+
+  # Backup retention
+  retention_policy:
+    daily_backups: 7
+    weekly_backups: 4
+    monthly_backups: 3
+
+  # Quick restore
+  enable_quick_restore: true
+  restore_on_failure: false  # Manual restore only
+
+# ============================================================================
+# INCIDENT RESPONSE
+# ============================================================================
+incident_response:
+  enabled: true
+
+  # Automated response
+  auto_response: true
+  response_time_seconds: 10
+
+  # Response actions
+  actions:
+    containment:
+      - "isolate_attack_source"
+      - "block_network_traffic"
+      - "terminate_attack_process"
+
+    investigation:
+      - "capture_logs"
+      - "snapshot_system_state"
+      - "collect_forensics"
+
+    recovery:
+      - "restore_from_backup"
+      - "cleanup_artifacts"
+      - "verify_integrity"
+
+  # Escalation
+  escalation:
+    enabled: true
+    levels:
+      - level: 1
+        threshold: "low_severity"
+        notify: ["operator"]
+        timeout_minutes: 15
+
+      - level: 2
+        threshold: "medium_severity"
+        notify: ["operator", "security_team"]
+        timeout_minutes: 10
+
+      - level: 3
+        threshold: "high_severity"
+        notify: ["operator", "security_team", "management"]
+        timeout_minutes: 5
+
+# ============================================================================
+# COMPLIANCE & REGULATIONS
+# ============================================================================
+compliance:
+  enabled: true
+
+  # Regulatory requirements
+  frameworks:
+    - "internal_security_policy"
+    - "penetration_testing_rules_of_engagement"
+
+  # Documentation requirements
+  require_documentation:
+    - "authorization_letter"
+    - "scope_definition"
+    - "risk_assessment"
+    - "incident_response_plan"
+
+  # Approval workflow
+  approval_workflow:
+    enabled: true
+    approvers_required: 1
+    approval_timeout_hours: 24
+
+# ============================================================================
+# TESTING & VALIDATION
+# ============================================================================
+testing:
+  # Pre-flight checks
+  pre_flight_checks:
+    enabled: true
+    checks:
+      - "monitoring_active"
+      - "logging_enabled"
+      - "backup_available"
+      - "kill_switch_functional"
+      - "network_segmentation"
+      - "target_validation"
+
+  # Post-attack validation
+  post_attack_validation:
+    enabled: true
+    checks:
+      - "no_data_loss"
+      - "system_integrity"
+      - "service_availability"
+      - "artifact_cleanup"
+
+  # Dry run mode
+  dry_run:
+    enabled: false  # Set true to simulate without executing
+    log_intended_actions: true
+
+# ============================================================================
+# NOTIFICATION SETTINGS
+# ============================================================================
+notifications:
+  enabled: true
+
+  # Notify on events
+  events:
+    attack_started: true
+    attack_completed: true
+    attack_failed: true
+    violation_detected: true
+    kill_switch_triggered: true
+    high_risk_operation: true
+
+  # Notification methods (demo mode)
+  methods:
+    console: true
+    log_file: true
+    dashboard: true
+    email: false  # Disabled in demo
+    sms: false    # Disabled in demo
+    webhook: false
+
+# ============================================================================
+# RESOURCE LIMITS
+# ============================================================================
+resource_limits:
+  # Per-attack limits
+  per_attack:
+    max_duration_seconds: 300
+    max_memory_mb: 256
+    max_cpu_percent: 25
+    max_network_connections: 100
+
+  # Global limits
+  global:
+    max_concurrent_attacks: 5
+    max_total_memory_mb: 1024
+    max_total_cpu_percent: 50
+
+  # Automatic throttling
+  auto_throttle:
+    enabled: true
+    trigger_cpu_percent: 60
+    trigger_memory_percent: 70
+
+# ============================================================================
+# EMERGENCY PROCEDURES
+# ============================================================================
+emergency:
+  # Panic mode
+  panic_mode:
+    enabled: true
+    triggers:
+      - "manual_activation"
+      - "system_critical"
+      - "multiple_violations"
+    actions:
+      - "stop_all_operations"
+      - "isolate_system"
+      - "snapshot_state"
+      - "notify_all_admins"
+
+  # Emergency contacts
+  contacts:
+    - name: "Security Team"
+      role: "primary"
+      contact: "security@localhost"
+
+    - name: "System Administrator"
+      role: "secondary"
+      contact: "admin@localhost"
+
+# ============================================================================
+# SAFE MODE OVERRIDES
+# ============================================================================
+overrides:
+  # Allow temporary overrides with approval
+  allow_overrides: false
+  override_requires_token: true
+  override_max_duration_hours: 2
+  override_audit: true
+
+  # Override approval
+  approval_required: true
+  approvers:
+    - "security_lead"
+    - "ciso"
+
+# ============================================================================
+# NOTES
+# ============================================================================
+# - Safe mode is MANDATORY in production environments
+# - All violations are logged and reported
+# - Kill switch can be triggered manually or automatically
+# - Review logs and alerts regularly
+# - Test all safety mechanisms before production use
+# - Keep this configuration under version control
+# ============================================================================

@@ -1,4 +1,5 @@
 flask
+flask-cors
 gradio
 openai
 requests
@@ -8,5 +9,21 @@ sqlalchemy
 archive
 aiohttp
 Pillow
+torch
 transformers
 panel
+pika
+kafka-python
+python-dotenv
+pyyaml
+scikit-learn
+matplotlib
+seaborn
+plotly
+datashader
+colorcet
+holoviews
+bokeh
+numpy
+pandas
+sendgrid
