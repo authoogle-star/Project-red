@@ -85,11 +85,12 @@ allowed_test_types:
 
 # Safety Controls
 safety:
-  max_tests_per_target_per_day: 10
-  max_concurrent_tests: 5
+  max_tests_per_target_per_day: 1000
+  max_concurrent_tests: 5000
   require_manual_approval: false
   auto_cleanup: false
   test_window:
     start_hour: 00  # 9 AM
     end_hour: 24   # 5 PM
     timezone: "America/New_York"
+
