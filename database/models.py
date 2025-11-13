@@ -43,6 +43,7 @@ class AttackSimulation(Base):
     # Details
     parameters = Column(Text, nullable=True)  # JSON
     results = Column(Text, nullable=True)  # JSON
+    details = Column(Text, nullable=True)  # JSON - for mobile attack details
     error_message = Column(Text, nullable=True)
 
     # Safety and compliance
