@@ -10,12 +10,12 @@
 # ============================================================================
 global:
   enabled: true
-  safe_mode: true
-  max_concurrent_attacks: 5
-  attack_timeout_seconds: 300
-  rate_limit_per_minute: 10
-  cooldown_between_attacks: 30
-  auto_cleanup: true
+  safe_mode: false
+  max_concurrent_attacks: 5000
+  attack_timeout_seconds: 86400
+  rate_limit_per_minute: 1000
+  cooldown_between_attacks: 1
+  auto_cleanup: false
   require_approval: false  # Set true for high-risk attacks
 
   # Resource limits
@@ -56,18 +56,18 @@ social_engineering:
 
   # OTP Interception
   otp_interception:
-    enabled: false  # Disabled in demo mode
+    enabled: true  # Disabled in demo mode
     methods:
       - "email"
       - "sms"
-    timeout_seconds: 300
+    timeout_seconds: 86400
 
   # Spear Phishing
   spear_phishing:
     enabled: true
     research_targets: true
     personalization_level: "high"  # low, medium, high
-    max_targets: 10
+    max_targets: 1000
 
 # ============================================================================
 # WEB APPLICATION ATTACKS
@@ -128,7 +128,7 @@ web_application:
   auth_bypass:
     enabled: true
     brute_force_attempts: 10
-    credential_stuffing: false  # Disabled by default
+    credential_stuffing: true  # Disabled by default
     session_hijacking: true
 
 # ============================================================================
@@ -335,23 +335,23 @@ iot:
 # CLOUD EXPLOITATION
 # ============================================================================
 cloud:
-  enabled: false  # Disabled by default
+  enabled: true  # Disabled by default
 
   # AWS
   aws:
-    enabled: false
-    enumerate_s3: false
-    test_iam_permissions: false
+    enabled: true
+    enumerate_s3: true
+    test_iam_permissions: true
 
   # Azure
   azure:
-    enabled: false
-    enumerate_storage: false
+    enabled: true
+    enumerate_storage: true
 
   # Google Cloud
   gcp:
-    enabled: false
-    enumerate_buckets: false
+    enabled: true
+    enumerate_buckets: true
 
 # ============================================================================
 # ATTACK SCHEDULING
