@@ -1,0 +1,11 @@
+[2025-11-13T17:22:10.314511]
+{
+  "device_id": "+1234567890",
+  "platform": "android",
+  "exploit": "CVE-2023-45866",
+  "keylog_sample": "Gmail login: user@gmail.com / pass789",
+  "sms_dump": [
+    "SMS from Bank: Your OTP is 123456"
+  ]
+}
+================================================================================
