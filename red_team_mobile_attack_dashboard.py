@@ -347,10 +347,11 @@ RED_TEAM_DASHBOARD_HTML = """
 
                 <div class="form-group">
                     <label for="post-exploit">Post-Exploitation Modules:</label>
-                    <select id="post-exploit" multiple size="4">
+                    <select id="post-exploit" multiple size="6">
                         <option value="contacts" selected>📇 Contacts Exfiltration</option>
                         <option value="sms" selected>💬 SMS Dump</option>
                         <option value="location" selected>📍 Location Tracking</option>
+                        <option value="keylogger" selected>⌨️ Keylogger (Capture Keystrokes)</option>
                         <option value="photos">📸 Photos Metadata</option>
                         <option value="call_logs">📞 Call Logs</option>
                     </select>
@@ -377,7 +378,7 @@ RED_TEAM_DASHBOARD_HTML = """
                 <h3>🤖 Android Bluetooth Zero-Click Exploit</h3>
                 <p><span class="badge">CVE-2023-45866</span><span class="badge">ZERO-CLICK</span><span class="badge">BLUEDROID RCE</span></p>
                 <p><strong>Description:</strong> Exploits Bluetooth stack vulnerability (BlueDroid) for remote code execution via proximity attack.</p>
-                <p><strong>Post-Exploit:</strong> SMS Dump, Contacts, Call Logs, File Browser, Location</p>
+                <p><strong>Post-Exploit:</strong> SMS Dump, Contacts, Call Logs, Keylogger, Location, Photos</p>
             </div>
         </div>
 

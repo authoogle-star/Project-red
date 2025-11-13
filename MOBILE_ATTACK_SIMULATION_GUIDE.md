@@ -164,6 +164,7 @@ Access at: `http://localhost:5009`
    - 📇 Contacts Exfiltration
    - 💬 SMS Dump
    - 📍 Location Tracking
+   - ⌨️ Keylogger (Capture Keystrokes)
    - 📸 Photos Metadata
    - 📞 Call Logs
 
@@ -215,7 +216,8 @@ Access at: `http://localhost:5009`
 - 💬 SMS message dump (`/var/mobile/Library/SMS/sms.db`)
 - 📍 Device location tracking
 - 📸 Photos metadata extraction
-- ⌨️ Keylogger deployment
+- ⌨️ Keylogger deployment (IOKit framework hooking)
+- 📞 Call logs exfiltration (`CallHistory.storedata`)
 
 **Attack Flow:**
 ```
@@ -239,8 +241,10 @@ Access at: `http://localhost:5009`
 - 💬 SMS database dump (`/data/data/com.android.providers.telephony/`)
 - 📇 Contacts exfiltration (`/data/data/com.android.providers.contacts/`)
 - 📞 Call logs extraction
+- ⌨️ Keylogger deployment (AccessibilityService API hooking)
 - 📂 File system browsing
 - 📍 GPS location tracking
+- 📸 Photos metadata exfiltration (`/sdcard/DCIM`, `/sdcard/Pictures`)
 
 **Attack Flow:**
 ```
