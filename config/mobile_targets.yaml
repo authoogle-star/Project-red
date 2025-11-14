@@ -5,7 +5,7 @@
 authorized_targets:
   # iOS Devices
   - type: phone
-    value: "+447575960046"  # Replace with actual authorized phone number
+    value: "+12164341828"  # Replace with actual authorized phone number
     device_type: ios
     device_name: "Test iPhone - Security Team Member 1"
     owner: "security_team_member_1"
@@ -26,7 +26,7 @@ authorized_targets:
 
   # Android Devices
   - type: phone
-    value: "+447575960046"  # Replace with actual authorized phone number
+    value: "+12164341828"  # Replace with actual authorized phone number
     device_type: android
     device_name: "Test Android - Security Team Member 2"
     owner: "security_team_member_2"
